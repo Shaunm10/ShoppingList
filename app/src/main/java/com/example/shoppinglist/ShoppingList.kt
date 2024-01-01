@@ -157,5 +157,14 @@ fun ShoppingListItem(
             text = item.name,
             modifier = Modifier.padding(8.dp)
         )
+        Text(text = "Qty: ${item.quantity}")
+        Button(onClick = { /*TODO*/ }) {
+            Text(text = "Edit")
+
+        }
+        Button(onClick = { /*TODO*/ }) {
+            Text(text = "Delete")
+
+        }
     }
 }
