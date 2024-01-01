@@ -75,16 +75,21 @@ fun ShoppingListApp() {
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Button(onClick = {
-                    if(itemName.isNotBlank())
+                        // only if the user added text.
+                        if (itemName.isNotBlank()) {
 
-                        val shoppingItem = ShoppingItem(
-                        items.count() + 1,
-                        itemName,
-                        itemQuantity.toIntOrNull() ?: 1,
-                        false)
+                            val shoppingItem = ShoppingItem(
+                                items.count() + 1,
+                                itemName,
+                                itemQuantity.toIntOrNull() ?: 1,
+                                false
+                            )
+                            
+                            // this adds the item to the list.
+                            items = items + shoppingItem
 
-                        items.
-
+                            showDialog = false
+                        }
 
                     }) {
                         Text(text = "Add")
