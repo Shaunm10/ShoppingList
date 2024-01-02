@@ -9,9 +9,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
@@ -165,7 +167,31 @@ fun ShoppingItemEditor(
             .padding(8.dp),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-
+        Column {
+            BasicTextField(
+                value = editingName,
+                onValueChange = { editingName = it },
+                singleLine = true,
+                modifier = Modifier
+                    .wrapContentSize()
+                    .padding(8.dp)
+            )
+            BasicTextField(
+                value = editingQuantity,
+                onValueChange = { editingQuantity = it },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                modifier = Modifier
+                    .wrapContentSize()
+                    .padding(8.dp)
+            )
+        }
+        Button(onClick = {
+            isEditing = false
+            onEditComplete(editingName, editingQuantity.toIntOrNull() ?: 1)
+        }) {
+            Text(text = "Save")
+        }
     }
 
 }
