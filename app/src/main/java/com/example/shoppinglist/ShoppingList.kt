@@ -20,7 +20,6 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -33,7 +32,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 
@@ -74,13 +72,32 @@ fun ShoppingListApp() {
         ) {
             items(items) { shoppingItem ->
                 // create a new ShoppingListItem for each of the items in our list (state)
-                ShoppingListItem(
-                    shoppingItem,
-                    {},
-                    {
-                        items = items.filter { it.id != shoppingItem.id }
-                    }
-                )
+                if (shoppingItem.isEditing) {
+
+                    // display this UI
+                    ShoppingItemEditor(
+                        item = shoppingItem,
+                        onEditComplete = { editedName, editedQuantity ->
+
+                            // making isEditing false for all items.
+                            items = items.map { it.copy(isEditing = false) }
+
+                            // find the item being that is being edited
+                            val editedItem = items.find { it.id == shoppingItem.id }
+
+                            // finally update the two properties of the item being edited.
+                            editedItem?.let {
+                                it.name = editedName
+                                it.quantity = editedQuantity
+                            }
+                        })
+                } else {
+                    ShoppingListItem(item = shoppingItem, onEditClick = {
+
+                        // copy the items over and set the isEditing to all false but this particular one.
+                        items = items.map { it.copy(isEditing = it.id == shoppingItem.id) }
+                    }) {}
+                }
             }
         }
     }
