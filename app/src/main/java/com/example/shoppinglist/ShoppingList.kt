@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -59,7 +60,9 @@ fun ShoppingListApp() {
         verticalArrangement = Arrangement.Center
     ) {
         Button(
-            onClick = { showDialog = true },
+            onClick = {
+                showDialog = true
+            },
             //Text(text = "click me."),
             modifier = Modifier.align(Alignment.CenterHorizontally)
         ) {
@@ -68,7 +71,7 @@ fun ShoppingListApp() {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
+                .padding(16.dp) // desity pixels
         ) {
             items(items) { shoppingItem ->
                 // create a new ShoppingListItem for each of the items in our list (state)
@@ -112,19 +115,21 @@ fun ShoppingListApp() {
                         .padding(8.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
+                    // Add Button
                     Button(onClick = {
                         // only if the user added text.
                         if (itemName.isNotBlank()) {
 
                             val shoppingItem = ShoppingItem(
-                                items.count() + 1,
-                                itemName,
-                                itemQuantity.toIntOrNull() ?: 1,
-                                false
+                                // this is flawed logic
+                                id = items.count() + 1,
+                                name = itemName,
+                                quantity =  itemQuantity.toIntOrNull() ?: 1
                             )
 
                             // this adds the item to the list.
                             items = items + shoppingItem
+
 
                             // reset the state
                             itemName = ""
@@ -135,7 +140,12 @@ fun ShoppingListApp() {
                     }) {
                         Text(text = "Add")
                     }
-                    Button(onClick = { showDialog = false }) {
+                    // Cancel Button
+                    Button(onClick = {
+                        itemName = ""
+                        itemQuantity = "1"
+                        showDialog = false
+                    }) {
                         Text(text = "Cancel")
                     }
                 }
@@ -187,7 +197,7 @@ fun ShoppingItemEditor(
         Column {
             BasicTextField(
                 value = editingName,
-                onValueChange = { editingName = it },
+                onValueChange = {input -> editingName = input },
                 singleLine = true,
                 modifier = Modifier
                     .wrapContentSize()
@@ -195,7 +205,7 @@ fun ShoppingItemEditor(
             )
             BasicTextField(
                 value = editingQuantity,
-                onValueChange = { editingQuantity = it },
+                onValueChange = {input -> editingQuantity = input },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier
@@ -215,6 +225,7 @@ fun ShoppingItemEditor(
 
 @Composable
 fun ShoppingListItem(
+    /* This is basically the interface for the composable*/
     item: ShoppingItem,
     onEditClick: () -> Unit,
     onDeleteClick: () -> Unit
