@@ -98,8 +98,17 @@ fun ShoppingListApp() {
                     ShoppingListItem(item = shoppingItem, onEditClick = {
 
                         // copy the items over and set the isEditing to all false but this particular one.
-                        items = items.map { it.copy(isEditing = it.id == shoppingItem.id) }
-                    }) {}
+                        items = items.map {
+                            it.copy(
+                                // will only set isEditing for the 1 item being edited.
+                                isEditing = (it.id == shoppingItem.id)
+                            )
+                        }
+                    }, onDeleteClick = {
+                        // now remove this item
+                        items = items - shoppingItem
+
+                    })
                 }
             }
         }
@@ -124,7 +133,7 @@ fun ShoppingListApp() {
                                 // this is flawed logic
                                 id = items.count() + 1,
                                 name = itemName,
-                                quantity =  itemQuantity.toIntOrNull() ?: 1
+                                quantity = itemQuantity.toIntOrNull() ?: 1
                             )
 
                             // this adds the item to the list.
@@ -190,22 +199,23 @@ fun ShoppingItemEditor(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color.Gray)
+            .background(Color.White)
             .padding(8.dp),
-        horizontalArrangement = Arrangement.SpaceEvenly
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Column {
             BasicTextField(
                 value = editingName,
-                onValueChange = {input -> editingName = input },
+                onValueChange = { input -> editingName = input },
                 singleLine = true,
                 modifier = Modifier
                     .wrapContentSize()
                     .padding(8.dp)
+
             )
             BasicTextField(
                 value = editingQuantity,
-                onValueChange = {input -> editingQuantity = input },
+                onValueChange = { input -> editingQuantity = input },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier
